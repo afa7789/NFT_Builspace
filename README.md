@@ -1,4 +1,5 @@
 # BuildSpace
+![!Theme Image](resources/poster-small.png)
 
 ## [BS-NFTS](bs-nfts/README.md)
 
