@@ -3,6 +3,7 @@ import twitterLogo from './assets/twitter-logo.svg';
 import { ethers } from "ethers";
 import React, { useEffect, useState } from "react";
 import myEpicNft from './utils/ThatRandomNFT.json';
+import SyncLoader from "react-spinners/SyncLoader";
 
 const TWITTER_HANDLE = '_buildspace';
 const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
@@ -13,6 +14,8 @@ const TOTAL_MINT_COUNT = 50;
 const CONTRACT_ADDRESS = "0x7f38e29dA67f20C6A986F490eFA316a978493D78";
 
 const App = () => {
+
+  const [loading, setLoading] = useState(false);
 
   const [currentAccount, setCurrentAccount] = useState("");
 
@@ -96,6 +99,7 @@ const App = () => {
   }
 
   const askContractToMintNft = async () => {
+    setLoading(true);
     try {
       const { ethereum } = window;
 
@@ -118,6 +122,7 @@ const App = () => {
     } catch (error) {
       console.log(error)
     }
+    setLoading(false);
   }
 
 
@@ -132,7 +137,11 @@ const App = () => {
   );
 
   const renderMintUI = () => (
-    <button onClick={askContractToMintNft} className="cta-button connect-wallet-button">
+    <button 
+      onClick={askContractToMintNft} 
+      className="cta-button connect-wallet-button"
+      disabled={loading}
+    >
       Mint NFT
     </button>
   )
@@ -145,8 +154,17 @@ const App = () => {
           <p className="sub-text">
             Each unique. Each beautiful. Discover your NFT today.
           </p>
+    
           {currentAccount === "" ? renderNotConnectedContainer() : renderMintUI()}
+          <br />
+          <br />
+          {
+            loading && (
+              <SyncLoader color="#fff" loading={loading} css={true} size={15} />
+            )
+          }
         </div>
+
         <div className="footer-container">
           <img alt="Twitter Logo" className="twitter-logo" src={twitterLogo} />
           <a
